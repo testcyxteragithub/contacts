@@ -1,0 +1,70 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="jquery.dataTables.min.css" >
+	</head>
+	<body>
+		<div class="container">
+			<h1>Historial de ejecuciones</h1>
+			<div id="app">
+			  	<table class="display dataTable">
+			  		<thead>
+			  			<tr><th colspan="2"><button type="button" class="btn btn-primary" v-on:click="findAll">Recargar Historial</button> </th></tr>
+			  			<tr><th>Input</th><th>Output</th></tr>
+			  		</thead>
+			  		<tbody>
+			  			<tr v-for="item in executions">
+			  				<td style="white-space: pre;">{{item.input}}</td>
+			  				<td style="white-space: pre;"a>{{item.output}}</td>
+			  			</tr>
+			  		</tbody>
+			  	</table>
+			  
+			</div>
+		</div>
+		
+		<script src="jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="hbootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<script src="vue.js"></script>
+		<script src="axios.min.js"></script>
+
+		<script type="text/javascript">		
+		var app = new Vue
+		({
+			el: '#app'
+			,data: 
+			{
+			    executions: [ ]
+			}
+			,mounted: function ()
+			{
+				this.findAll();
+			}
+			,methods: 
+			{
+				findAll : function()
+				{
+					var vm = this;
+					axios.get('/executions')
+			    	.then(function (response) 
+			    	{
+			    	    if( response.status === 200 )
+			    	    {
+			    	    	vm.executions = response.data;
+			    	    }
+			    	    else
+		    	    	{
+			    	    	console.log(response);
+			    	    }
+			    	})
+			    	.catch(function (error) 
+			    	{
+			    		console.log(error);
+			    	});
+				}
+			}
+		})
+		</script>
+	</body>
+</html>
